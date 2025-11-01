@@ -1,34 +1,19 @@
 import streamlit as st
-import requests
+import functions
 
 def app():
-    st.title("Busca de Pokémon")
+    st.title("Captura de Pokémon")
+    with st.form('button'):
+        pokemon = st.text_input("Digite o nome do Pokémon capturado").lower()
+        id = st.text_input("Digite o id do treinador que o capturou")
+        imagem = st.file_uploader("Envie uma imagem do Pokémon", type=["png", "jpg", "jpeg"])
+        button = st.form_submit_button('Capturar!')
 
-    pokemon = st.text_input("Digite o nome de um Pokémon:").lower()
-
-    if st.button("Buscar"):
-        link = f"https://pokeapi.co/api/v2/pokemon/{pokemon}"
-        
-        try:
-            requisição = requests.get(link)
-
-            if requisição.status_code == 200:
-                dados = requisição.json()
-
-                informações = {
-                    "Nome": dados["name"].capitalize(),
-                    "Altura": dados["height"],
-                    "Peso": dados["weight"],
-                    "Tipos": [t["type"]["name"] for t in dados["types"]],
-                }
-
-                st.subheader("📌 Informações do Pokémon")
-                st.write(informações)
-
-                st.image(dados["sprites"]["front_default"], caption=pokemon.capitalize())
-
-            else:
-                st.error("Pokémon não encontrado.")
-
-        except Exception as e:
-            st.error(f"Ocorreu o erro: {e}")
+    if button:
+        existe = functions.verificar_treinador(id)
+        if existe == False:
+            st.warning("O treinador não existe!")
+        else:
+            functions.adicionar_pokemon(pokemon, id, imagem)
+            st.success("Pokémon capturado")
+            st.balloons()
