@@ -13,12 +13,16 @@ def app():
     
     st.write('Já tem uma conta?')
     if st.button('Entrar'):
-        st.session_state.pagina = "login"
+        st.session_state.pagina = "perfil"
         
     if button:
         if confirm_id != id:
             st.warning('Os IDs não se coincidem')
         else:
-            functions.inserir_treinador(nome, cidade, imagem, id)
-            st.success('Treinador adicionado')
-            st.balloons()
+            treinadorExiste = functions.verificar_treinador(id)
+            if treinadorExiste == False:
+                functions.inserir_treinador(nome, cidade, imagem, id)
+                st.success('Treinador adicionado')
+                st.balloons()
+            else:
+                st.warning(f"O treinador com o id: {id} já existe!")

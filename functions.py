@@ -142,3 +142,40 @@ def mostrar_pokemon(id):
                 st.markdown(f"**Tipo:** {tipo}")
                 st.markdown(f"**Altura:** {altura} m")
                 st.markdown(f"**Peso:** {peso} kg")
+                
+def mostrar_pokemons():
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("SELECT nome, altura, peso, tipo, id_treinador, imagem FROM pokemons")
+    pokemons = cursor.fetchall()
+    conn.close()
+
+    if not pokemons:
+        st.warning("Ainda não existem Pokémons cadastrados.")
+        return
+
+    colunas = st.columns(3)
+    for i, pokemon in enumerate(pokemons):
+        nome, altura, peso, tipo, idTreinador, imagem = pokemon
+        
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute("SELECT nome FROM treinadores WHERE id = %s", (idTreinador,))
+        resultado = cursor.fetchone()
+        conn.close()
+        nomeT = resultado[0]
+        
+        coluna_atual = colunas[i % 3]
+        with coluna_atual:
+            with st.expander(f"{nome}", expanded=True):
+                numero_pokemon = f"N° {i+1:04d}"
+                st.markdown(f"**{numero_pokemon}**")
+
+                if imagem:
+                    st.image(f"imagens/{imagem}", width=100, caption="")
+                else:
+                    st.text("Imagem não disponível")
+                st.markdown(f"**Tipo:** {tipo}")
+                st.markdown(f"**Altura:** {altura} m")
+                st.markdown(f"**Peso:** {peso} kg")
+                st.markdown(f"**Treinador:** {nomeT}")

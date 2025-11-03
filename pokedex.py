@@ -17,3 +17,7 @@ def app():
             functions.adicionar_pokemon(pokemon, id, imagem)
             st.success("Pokémon capturado")
             st.balloons()
+            
+    
+    st.header('Pokémons encontrados:')
+    functions.mostrar_pokemons()
