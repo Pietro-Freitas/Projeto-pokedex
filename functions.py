@@ -151,7 +151,7 @@ def mostrar_pokemons():
     conn.close()
 
     if not pokemons:
-        st.warning("Ainda não existem Pokémons cadastrados.")
+        st.warning("Ainda não foram encontrados nenhum Pokémon.")
         return
 
     colunas = st.columns(3)
@@ -179,3 +179,4 @@ def mostrar_pokemons():
                 st.markdown(f"**Altura:** {altura} m")
                 st.markdown(f"**Peso:** {peso} kg")
                 st.markdown(f"**Treinador:** {nomeT}")
+
